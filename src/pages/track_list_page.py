@@ -143,11 +143,17 @@ class TrackListPage(Page):
         self.auto_load.set_items(sorted_tracks)
 
     def _recently_added(self, tracks):
+        if not(hasattr(self.item, "num_tracks") and hasattr(self.item, "tracks")):
+            return tracks.copy()
+
         num_tracks = self.item.num_tracks or len(tracks)
         offset = num_tracks - 50
         return reversed(self.item.tracks(limit=50, offset=offset))
 
     def load_new_recently_added(self, limit, offset):
+        if not(hasattr(self.item, "num_tracks") and hasattr(self.item, "tracks")):
+            return []
+
         num_tracks = self.item.num_tracks
         reversed_offset = max(0, num_tracks - offset - limit)
         reversed_limit = min(limit, num_tracks - offset)
